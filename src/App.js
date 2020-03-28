@@ -1,23 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Quiz from './components/quiz'
+import Modal from 'react-modal';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+Modal.setAppElement('#root')
+class App extends React.Component {
+  constructor(props) {
+  super(props)
+    this.state = {
+      modalIsOpen: false
+    };
+  }
+  openModal =() => {
+    this.setState({modalIsOpen: true});
+  }
+  closeModal = () => {
+    this.setState({modalIsOpen: false});
+  }
+  render(){
+    return(
+      <React.Fragment>
+        <header></header>
+        <main>
+          <div className="wrap">
+            <button onClick={this.openModal}>初級</button>
+            <Modal isOpen={this.state.modalIsOpen} contentLabel="Example Modal"> <Quiz/> <button onClick={this.closeModal}>close</button> </Modal>
+          </div>
+        </main>
+        <footer></footer>
+      </React.Fragment>
+    )
+  }
 }
-
 export default App;
