@@ -10,12 +10,14 @@ class App extends React.Component {
       modalIsOpen: false
     };
   }
+  
   openModal =() => {
     this.setState({modalIsOpen: true});
   }
   closeModal = () => {
     this.setState({modalIsOpen: false});
   }
+
   render(){
     return(
       <React.Fragment>
