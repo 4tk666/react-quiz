@@ -1,5 +1,7 @@
 import React from 'react';
 import Timer from  '../components/timer'
+import Modal from 'react-modal';
+
 const data = [
   { questionTitle: "オードリーはリスナーのことを何と呼ぶ？",
     answerNumber: 2,
@@ -41,23 +43,22 @@ const data = [
     answers:["ケイダッシュ","人力舎","ケイダッシュステージ","太田プロ"]
   },
 ]
-const ranDataNum = () => {
-  return Math.floor( Math.random() * data.length );
-}
-const ranQuestionData = () =>{
-  return data[ranDataNum()];
-}
-const aaa = ranQuestionData()
+
+Modal.setAppElement('#root')
+
+const firstQuestion = data.shift();
+
 class Quiz extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      questionTitle: aaa.questionTitle,
-      answers: aaa.answers,
-      answerNumber: aaa.answerNumber,
-      score: 0
+      questionTitle: firstQuestion.questionTitle,
+      answers: firstQuestion.answers,
+      answerNumber: firstQuestion.answerNumber,
+      score: 0,
     }
   }
+
   scoreUp = (e) => {
     const choiceNumber = e.target.getAttribute("target");
     const choiceNumberInt = parseFloat(choiceNumber);
@@ -66,26 +67,35 @@ class Quiz extends React.Component {
         score: this.state.score + 10
       });
     }
-    this.questionChange();
+    this.questionChange()
   }
+
   questionChange = () => {
-    const bbb = ranQuestionData()
-    this.setState ({
-      questionTitle: bbb.questionTitle,
-      answers: bbb.answers,
-      answerNumber: bbb.answerNumber,
-    });
+    const nextQuestion = data.shift();
+    if(nextQuestion !== void 0){
+      this.setState ({
+        questionTitle: nextQuestion.questionTitle,
+        answers: nextQuestion.answers,
+        answerNumber: nextQuestion.answerNumber,
+      });
+    }else{
+      this.scoreResult();
+    }
   }
+
+  scoreResult = () => {
+    
+  }
+
   render(){
     return(
       <React.Fragment>
-        <div className="modal-list">
+        <div className="modal-contents" id="modal_contents">
           <div>
             <div className="quiz-title-timer">
+              <Timer questionChange={this.questionChange} />
               <div>{this.state.questionTitle}</div>
-              <Timer questionChange={this.questionChange}/>
             </div>
-            <div>{this.state.score}</div>
             <ul className="choice-list">
               {this.state.answers.map((answer,i) =>(
                 <li className="choice-item" key={i} onClick={this.scoreUp} target={i+1}><span className="choice-number">{i+1}</span>{answer}</li>
@@ -97,4 +107,5 @@ class Quiz extends React.Component {
     )
   }
 }
+
 export default Quiz;
